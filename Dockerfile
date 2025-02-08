@@ -9,7 +9,6 @@ ARG NGINX_VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="nemchik"
 
-
 # install packages
 RUN \
   if [ -z ${NGINX_VERSION+x} ]; then \
@@ -68,9 +67,16 @@ RUN \
     php83-sqlite3 \
     php83-tokenizer \
     php83-xmlreader \
-    php83-xsl && \
+    php83-xsl \
+    wkhtmltopdf && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   rm -f /etc/nginx/conf.d/stream.conf
+
+# Install PHPMailer (version 6.8.0)
+RUN mkdir -p /opt/phpmailer && \
+    wget -q -O /tmp/phpmailer.tar.gz https://github.com/PHPMailer/PHPMailer/archive/refs/tags/v6.8.0.tar.gz && \
+    tar -xzf /tmp/phpmailer.tar.gz -C /opt/phpmailer --strip-components=1 && \
+    rm -f /tmp/phpmailer.tar.gz
 
 # ports and volumes
 EXPOSE 80 443

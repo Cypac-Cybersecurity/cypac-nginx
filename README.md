@@ -16,6 +16,8 @@ The [LinuxServer.io](https://linuxserver.io) team brings you another container r
 * custom base image with s6 overlay
 * weekly base OS updates with common layers across the entire LinuxServer.io ecosystem to minimise space usage, down time and bandwidth
 * regular security updates
+* **PHPMailer library included** (installed at `/opt/phpmailer`)
+* **wkhtmltopdf available** for PDF generation
 
 Find us at:
 
@@ -76,6 +78,7 @@ To help you get started creating a container from this image you can either use 
 
 >[!NOTE]
 >Unless a parameter is flaged as 'optional', it is *mandatory* and a value must be provided.
+> This release now includes the PHPMailer library (version 6.8.0) available at `/opt/phpmailer`. Additionally, `wkhtmltopdf` is installed and ready for use, making it easier to generate PDFs from your web content.
 
 ### docker-compose (recommended, [click here for more info](https://docs.linuxserver.io/general/docker-compose))
 
