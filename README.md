@@ -16,6 +16,9 @@ The [LinuxServer.io](https://linuxserver.io) team brings you another container r
 * custom base image with s6 overlay
 * weekly base OS updates with common layers across the entire LinuxServer.io ecosystem to minimise space usage, down time and bandwidth
 * regular security updates
+* **PHPMailer library included** (installed at `/opt/phpmailer`)
+* **Headless Chromium included** for PDF generation
+
 
 Find us at:
 
@@ -47,7 +50,7 @@ Find us at:
 
 We utilise the docker manifest for multi-platform awareness. More information is available from docker [here](https://distribution.github.io/distribution/spec/manifest-v2-2/#manifest-list) and our announcement [here](https://blog.linuxserver.io/2019/02/21/the-lsio-pipeline-project/).
 
-Simply pulling `lscr.io/linuxserver/nginx:latest` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
+Simply pulling `ghcr.io/cypac-cybersecurity/cypac-nginx:latest` should retrieve the correct image for your arch, but you can also pull specific arch images via tags.
 
 The architectures supported by this image are:
 
@@ -76,6 +79,7 @@ To help you get started creating a container from this image you can either use 
 
 >[!NOTE]
 >Unless a parameter is flaged as 'optional', it is *mandatory* and a value must be provided.
+> This release now includes the PHPMailer library (version 6.8.0) available at `/opt/phpmailer`. Additionally, `Headless Chromium` is installed and ready for use, making it easier to generate PDFs from your web content.
 
 ### docker-compose (recommended, [click here for more info](https://docs.linuxserver.io/general/docker-compose))
 
@@ -83,7 +87,7 @@ To help you get started creating a container from this image you can either use 
 ---
 services:
   nginx:
-    image: lscr.io/linuxserver/nginx:latest
+    image: ghcr.io/cypac-cybersecurity/cypac-nginx:latest
     container_name: nginx
     environment:
       - PUID=1000
@@ -109,7 +113,7 @@ docker run -d \
   -p 443:443 \
   -v /path/to/nginx/config:/config \
   --restart unless-stopped \
-  lscr.io/linuxserver/nginx:latest
+  ghcr.io/cypac-cybersecurity/cypac-nginx:latest
 ```
 
 ## Parameters
@@ -190,7 +194,7 @@ We publish various [Docker Mods](https://github.com/linuxserver/docker-mods) to 
 * Image version number:
 
     ```bash
-    docker inspect -f '{{ index .Config.Labels "build_version" }}' lscr.io/linuxserver/nginx:latest
+    docker inspect -f '{{ index .Config.Labels "build_version" }}' ghcr.io/cypac-cybersecurity/cypac-nginx:latest
     ```
 
 ## Updating Info
@@ -238,7 +242,7 @@ Below are the instructions for updating containers:
 * Update the image:
 
     ```bash
-    docker pull lscr.io/linuxserver/nginx:latest
+    docker pull ghcr.io/cypac-cybersecurity/cypac-nginx:latest
     ```
 
 * Stop the running container:
@@ -275,7 +279,7 @@ cd docker-nginx
 docker build \
   --no-cache \
   --pull \
-  -t lscr.io/linuxserver/nginx:latest .
+  -t ghcr.io/cypac-cybersecurity/cypac-nginx:latest .
 ```
 
 The ARM variants can be built on x86_64 hardware and vice versa using `lscr.io/linuxserver/qemu-static`
