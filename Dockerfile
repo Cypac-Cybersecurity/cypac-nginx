@@ -2,21 +2,21 @@
 
 FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.21
 
-# set version label
+# Set version label
 ARG BUILD_DATE
 ARG VERSION
 ARG NGINX_VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="nemchik"
 
-
-# install packages
+# Install necessary packages including Chromium for PDF rendering
 RUN \
   if [ -z ${NGINX_VERSION+x} ]; then \
     NGINX_VERSION=$(curl -sL "http://dl-cdn.alpinelinux.org/alpine/v3.21/main/x86_64/APKINDEX.tar.gz" | tar -xz -C /tmp \
     && awk '/^P:nginx$/,/V:/' /tmp/APKINDEX | sed -n 2p | sed 's/^V://'); \
   fi && \
   apk add --no-cache \
+    ca-certificates \
     memcached \
     nginx==${NGINX_VERSION} \
     nginx-mod-http-brotli==${NGINX_VERSION} \
@@ -68,11 +68,25 @@ RUN \
     php83-sqlite3 \
     php83-tokenizer \
     php83-xmlreader \
-    php83-xsl && \
+    php83-xsl \
+    chromium \
+    chromium-chromedriver \
+    font-noto \
+    font-noto-cjk \
+    font-noto-emoji \
+    fontconfig \
+    ttf-dejavu \
+    ttf-liberation && \
+  update-ca-certificates && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   rm -f /etc/nginx/conf.d/stream.conf
 
-# ports and volumes
-EXPOSE 80 443
+# Install PHPMailer (version 6.9.3)
+RUN mkdir -p /opt/phpmailer && \
+    wget -q -O /tmp/phpmailer.tar.gz https://github.com/PHPMailer/PHPMailer/archive/refs/tags/v6.9.3.tar.gz && \
+    tar -xzf /tmp/phpmailer.tar.gz -C /opt/phpmailer --strip-components=1 && \
+    rm -f /tmp/phpmailer.tar.gz
 
+# Ports and Volumes
+EXPOSE 80 443
 VOLUME /config
